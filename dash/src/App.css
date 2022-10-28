@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.control {
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+}

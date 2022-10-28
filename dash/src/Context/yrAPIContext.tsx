@@ -1,4 +1,4 @@
-import {createContext, useContext, useState} from "react";
+import {createContext, useState} from "react";
 import {PropsOf} from "@emotion/react";
 
 
@@ -7,8 +7,8 @@ const YrContext = createContext<any>({});
 // Getting the provider from projectContext
 const {Provider} = YrContext
 
-interface WeatherPoint {
-    date: Date,
+export interface WeatherPoint {
+    hour: Number,
     temp: Number,
     humidity: Number,
     cloudPct: Number,
@@ -35,12 +35,16 @@ const YrProvider = ({ children }: PropsOf<any>)  => {
                 const tmpList: WeatherPoint[] = []
                 timeseriesData.map((item: any) => {
                     const details = item.data.instant.details
-                    tmpList.push({temp: details.air_temperature,
-                                    humidity: details.relative_humidity,
-                                    cloudPct: details.cloud_area_fraction,
-                                    wind: details.wind_speed,
-                                    date: new Date(item.time)
-                    })
+                    if (tmpList.length <= 24) {
+                        tmpList.push({temp: details.air_temperature,
+                            humidity: details.relative_humidity,
+                            cloudPct: details.cloud_area_fraction,
+                            wind: details.wind_speed,
+                            hour: (new Date(item.time)).getHours()
+                        })
+                        return
+                    }
+
                 })
                 setWeatherPoints(tmpList)
                 setTimeFetched(new Date(timeseriesData[0].time))
